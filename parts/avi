@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-ingress
+  namespace: services
+  annotations:
+      avi_proxy: '{"virtualservice": {"east_west_placement": false}}'
+  labels:
+    app: rabbitmq
+spec:
+  ports:
+  - protocol: TCP
+    port: 15672
+    targetPort: management-console
+  selector:
+    app: rabbitmq
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: rabbitmq-ingress
+  namespace: services
+  annotations:
+    avi_proxy: '{"dedicated_route": false}'
+spec:
+  rules:
+  - host: rabbitmq-ingress.dev.run.pcs.aws-usw02-dev.ice.predix.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: rabbitmq
+          servicePort: 15672

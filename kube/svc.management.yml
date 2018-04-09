@@ -1,0 +1,12 @@
+kind: "Service"
+apiVersion: v1
+metadata:
+  name: rabbitmq-management
+spec:
+  type: {{SERVICE_TYPE}}
+  selector:
+    app: rabbitmq
+  sessionAffinity: None
+  ports:
+    - name: management-console
+      port: 15672
